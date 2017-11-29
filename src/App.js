@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Input } from 'reactbulma'
+import { Input, Title, SubTitle } from 'reactbulma'
 import Header from './components/Header'
 
 class App extends Component {
 
   state = {
-    tasks: ['Do the washing', 'Walk the dog'],
+    tasks: [
+      { todo:'Go for a run', time: '29/11/2017, 13:26:31', complete: true},
+      { todo:'Go for a walk', time: '29/11/2017, 13:26:31', complete: false}
+    ],
     searchPhrase: ''
   }
   onChangeQuery = (event) => {
@@ -18,41 +21,55 @@ class App extends Component {
 
   addTask = (event) => {
     event.preventDefault();
-    const currentTasks = [...this.state.tasks];
-
+    const existingItem = this.state.tasks.find(task => task.todo === this.state.searchPhrase);
+    if (!existingItem) {
+      this.setState({
+        tasks: [{ todo: this.state.searchPhrase,
+          time: new Date().toLocaleString()}, ...this.state.tasks ],
+        // Reset search phrase to an empty string
+        searchPhrase: ''
+      })
+    } else {
+        this.setState({
+          searchPhrase: ''
+        })
+    }
     // Add te new task to the list of Tasks
-    currentTasks.push(this.state.searchPhrase);
-    // Update the state with the new Tasks
-    this.setState({
-      tasks: currentTasks,
-      // Reset search phrase to an empty string
-      searchPhrase: ''
-    })
-
+    // Update the state with the new Task
   }
 
   render() {
 
     const  {tasks, searchPhrase } = this.state
     return (
-      <div className="App">
+      <div className='App'>
 
-        <Header totalIncomplete={ tasks.length } title="Tasks" />
+        <Header totalIncomplete={ tasks.length } title='Tasks' />
 
         <form onSubmit={ this.addTask }>
            <Input primary large
-           placeholder="search / add a todo!"
+           placeholder='search / add a todo!'
            value={ searchPhrase }
            onChange={ this.onChangeQuery }
            />
         </form>
         {
-          tasks.filter(myTask => myTask.includes(searchPhrase))
-          .map(myTask => <p>{myTask}</p>)
+          tasks.filter(myTask => myTask.todo.includes(searchPhrase))
+          .map(myTask => <ListItem todo={myTask.todo}
+            time={myTask.time}
+            complete={myTask.complete} />)
         }
       </div>
     );
   }
 }
+
+const ListItem = ({ todo, time, complete }) => (
+  <div>
+    <Title is='3'>{todo}</Title>
+    <SubTitle is='6'>{time}</SubTitle>
+    {complete && <p>"👻"</p>}        
+  </div>
+)
 
 export default App;
