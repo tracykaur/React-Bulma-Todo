@@ -2,16 +2,15 @@ import React, { Component } from 'react';
 import './App.css';
 import { Input, Title, SubTitle, Notification } from 'reactbulma'
 import Header from './components/Header'
+import axios from 'axios';
+
 
 let currentId = 5;
 const genId = () => ++currentId
 class App extends Component {
 
   state = {
-    tasks: [
-      { id : 1, todo:'Go for a run', time: '29/11/2017, 13:26:31', complete: true},
-      { id : 2, todo:'Go for a walk', time: '29/11/2017, 13:26:31', complete: false}
-    ],
+    tasks: [],
     searchPhrase: ''
   }
   onChangeQuery = (event) => {
@@ -70,6 +69,22 @@ class App extends Component {
         }
       </div>
     );
+  }
+  componentDidMount() {
+    axios.get('api/tasks')
+    .then((response) => {
+
+      console.log('Success!')
+      console.log(response.data)
+
+      this.setState({
+        tasks: response.data
+      })
+    })
+    .catch((error) => {
+      console.log('Whoops')
+      console.log(error)
+    });
   }
 }
 
