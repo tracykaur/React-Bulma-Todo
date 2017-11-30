@@ -24,12 +24,23 @@ class App extends Component {
     event.preventDefault();
     const existingItem = this.state.tasks.find(task => task.todo === this.state.searchPhrase);
     if (!existingItem) {
-      this.setState({
-        tasks: [{ id: genId(), todo: this.state.searchPhrase,
-          time: new Date().toLocaleString()}, ...this.state.tasks ],
-        // Reset search phrase to an empty string
-        searchPhrase: ''
-      })
+      axios.post('/api/tasks', {
+        id: genId(),
+        todo: this.state.searchPhrase,
+        time: new Date(),
+        complete: false
+        })
+        .then((response) => {
+          console.log(response);
+          this.setState({
+            tasks: [response.data, ...this.state.tasks ],
+            // Reset search phrase to an empty string
+            searchPhrase: ''
+          })
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     } else {
         this.setState({
           searchPhrase: ''
@@ -65,7 +76,7 @@ class App extends Component {
         </form>
         {
           tasks.filter(myTask => myTask.todo.includes(searchPhrase))
-          .map(myTask => <ListItem {...myTask} toggleComplete={this.toggleComplete}/>)
+          .map(myTask => <ListItem key={myTask.id} {...myTask} toggleComplete={this.toggleComplete}/>)
         }
       </div>
     );
@@ -91,7 +102,7 @@ class App extends Component {
 const ListItem = ({ todo, time, complete, toggleComplete, id }) => (
   <Notification onClick={ () => toggleComplete(id)}>
     {complete ? <Title is='3' className="completed">{todo}👻</Title> : <Title is="3">{todo}</Title>}
-    <SubTitle is='6'>{time}</SubTitle>
+    <SubTitle is='6'>{time.toLocaleString()}</SubTitle>
   </Notification>
 )
 

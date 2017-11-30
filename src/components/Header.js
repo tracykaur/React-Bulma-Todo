@@ -3,7 +3,7 @@ import { Progress, Level, Heading, Title } from 'reactbulma'
 
 const Header = ({ totalIncomplete, totalComplete  }) => (
   <div>
-    <Progress primary value={totalComplete/ (totalIncomplete+totalComplete) * 100} max="100"></Progress>
+    <Progress primary value={(totalComplete/ (totalIncomplete+totalComplete) * 100) || 0} max="100"></Progress>
     <Level>
       <Level.Item hasTextCentered>
         <div>
