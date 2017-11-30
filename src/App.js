@@ -36,7 +36,7 @@ class App extends Component {
           searchPhrase: ''
         })
     }
-    // Add te new task to the list of Tasks
+    // Add the new task to the list of Tasks
     // Update the state with the new Task
   }
 
@@ -58,7 +58,7 @@ class App extends Component {
         <Header totalIncomplete={ tasks.filter(task => !task.complete).length } totalComplete={ tasks.filter(task => task.complete).length } />
         <hr/>
         <form onSubmit={ this.addTask }>
-           <Input primary large
+           <Input primary large autoFocus
            placeholder='search / add a todo!'
            value={ searchPhrase }
            onChange={ this.onChangeQuery }
