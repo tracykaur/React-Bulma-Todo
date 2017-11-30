@@ -5,8 +5,6 @@ import Header from './components/Header'
 import axios from 'axios';
 
 
-let currentId = 5;
-const genId = () => ++currentId
 class App extends Component {
 
   state = {
@@ -25,7 +23,6 @@ class App extends Component {
     const existingItem = this.state.tasks.find(task => task.todo === this.state.searchPhrase);
     if (!existingItem) {
       axios.post('/api/tasks', {
-        id: genId(),
         todo: this.state.searchPhrase,
         time: new Date(),
         complete: false
@@ -50,8 +47,8 @@ class App extends Component {
     // Update the state with the new Task
   }
 
-  toggleComplete = (id) => {
-    const foundTodoIndex = this.state.tasks.findIndex(task => task.id === id)
+  toggleComplete = (_id) => {
+    const foundTodoIndex = this.state.tasks.findIndex(task => task._id === _id)
     this.setState(prevState => {
       const tasks = prevState.tasks
       tasks[foundTodoIndex].complete = !tasks[foundTodoIndex].complete
@@ -76,7 +73,7 @@ class App extends Component {
         </form>
         {
           tasks.filter(myTask => myTask.todo.includes(searchPhrase))
-          .map(myTask => <ListItem key={myTask.id} {...myTask} toggleComplete={this.toggleComplete}/>)
+          .map(myTask => <ListItem key={myTask._id} {...myTask} toggleComplete={this.toggleComplete}/>)
         }
       </div>
     );
@@ -99,8 +96,8 @@ class App extends Component {
   }
 }
 
-const ListItem = ({ todo, time, complete, toggleComplete, id }) => (
-  <Notification onClick={ () => toggleComplete(id)}>
+const ListItem = ({ todo, time, complete, toggleComplete, _id }) => (
+  <Notification onClick={ () => toggleComplete(_id)}>
     {complete ? <Title is='3' className="completed">{todo}👻</Title> : <Title is="3">{todo}</Title>}
     <SubTitle is='6'>{time.toLocaleString()}</SubTitle>
   </Notification>
