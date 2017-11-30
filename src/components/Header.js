@@ -10,8 +10,8 @@ const Header = ({ totalIncomplete, totalComplete  }) => (
           <Heading>INCOMPLETE</Heading>
           <Title>{ totalIncomplete }</Title>
         </div>
-      </Level.Item>
-      <Level.Item hasTextCentered>
+        </Level.Item>
+        <Level.Item hasTextCentered>
         <div>
           <Heading>COMPLETE</Heading>
           <Title>{ totalComplete }</Title>
